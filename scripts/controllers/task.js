@@ -14,9 +14,6 @@ function init() {
 function bindEvents() {
 
     document.querySelector('#add').addEventListener("click", addTask);
-    document.querySelector('#delete').addEventListener("click", deleteTasks);
-    document.querySelector('#update').addEventListener("click", updateTask);
-    document.querySelector("#loadFromServer").addEventListener("click", loadFromServer);
     document.querySelector('#clear').addEventListener("click", clearTask);
 
 }
@@ -25,30 +22,14 @@ function clearTask() {
 
     for (let key of fields) {
 
-        document.querySelector(`#${key}`).value = '';
-    }
-
-    document.querySelector("#name").focus();
-}
-
-function updateTask() {
-
-    for (let key in taskObject) {
-
-        if (key === 'markForDelete')
+        if (key === 'monthYear' || key === 'noOfDays' || key === 'lastUpdated')
             continue;
 
-        taskObject[key] = document.querySelector(`#${key}`).value;
+        else
+            document.querySelector(`#${key}`).value = '';
     }
 
-    printTasks();
-}
-
-function deleteTasks() {
-
-    taskOperations.remove();
-    countUpdate();
-    printTasks();
+    document.querySelector("#action").focus();
 }
 
 function addTask() {
@@ -75,15 +56,18 @@ function addTask() {
             let differenceInDays = date2.getTime() - date1.getTime();
             differenceInDays = differenceInDays / (1000 * 3600 * 24);
 
+            let subtractDays = document.querySelector('#excludedDate').value.split(",").length;
+            differenceInDays -= subtractDays;
+
             task[field] = `${differenceInDays}`;
-            console.log(document.querySelector('#excludedDate'));
         }
 
         else if (field === "lastUpdated") {
 
             const date = new Date();
+            let getDate = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`
             let getTime = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-            task[field] = `${getTime}`;
+            task[field] = `${getDate},${getTime}`;
         }
 
         else
@@ -96,44 +80,7 @@ function addTask() {
     clearTask();
 }
 
-function createIcon(className, fn, taskid) {
 
-    let icon = document.createElement('i');
-    icon.className = `fas ${className}`;
-    icon.setAttribute("task-id", taskid);
-    icon.addEventListener('click', fn);
-    return icon;
-}
-
-function edit() {
-
-    let id = this.getAttribute("task-id");
-    taskObject = taskOperations.searchById(id);
-
-    for (let key in taskObject) {
-
-        if (key === 'markForDelete')
-            continue;
-
-        if (key === 'id')
-            document.querySelector(`#${key}`).innerText = taskObject[key];
-
-        document.querySelector(`#${key}`).value = taskObject[key];
-    }
-
-}
-
-function markForDelete() {
-
-    let id = this.getAttribute("task-id");
-    taskOperations.mark(id);
-
-    let tr = this.parentNode.parentNode;
-    tr.classList.add('alert');
-    tr.classList.toggle('alert-danger');
-
-    countUpdate();
-}
 
 function printTasks() {
 
@@ -157,11 +104,5 @@ function printTask(task) {
         tr.insertCell(idx).innerText = task[key];
         idx++;
     }
-
-    let editIcon = createIcon('fa-edit me-2', edit, task.id);
-    let deleteIcon = createIcon('fa-trash-alt', markForDelete, task.id);
-
-    let td = tr.insertCell(idx);
-    td.appendChild(editIcon);
-    td.appendChild(deleteIcon);
+    
 }

@@ -15,11 +15,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
-    
 
-    <script src="./scripts/utils/constant.js"></script>
-    <script src="./scripts/utils/ajax.js"></script>
-    <script src="./scripts/utils/gen.js"></script>
+
     <script src="./scripts/models/taskModel.js"></script>
     <script src="./scripts/models/taskOperations.js"></script>
     <script src="./scripts/controllers/task.js"></script>
@@ -53,7 +50,7 @@
         </div>
 
         <div class="form-group">
-            <label for="">Dates Excluded</label>  
+            <label for="">Dates Excluded</label>
             <input type="text" id="excludedDate" class="form-control date" placeholder="Pick the multiple dates">
         </div>
 
@@ -69,9 +66,7 @@
 
         <section class="buttons">
             <button id="add" class="btn btn-primary">Add</button>
-            <button id="delete" class="btn btn-danger">Delete</button>
-            <button id="update" class="btn btn-secondary">Update</button>
-            <button id="loadFromServer" class="btn btn-success">Load From Server</button>
+            <button id="submit" class="btn btn-success">Submit</button>
             <button id="clear" class="btn btn-danger">Clear All</button>
         </section>
 
@@ -89,7 +84,6 @@
                         <th>Lead Count</th>
                         <th>Expected DDR</th>
                         <th>Last Updated</th>
-                        <th>Operations</th>
                     </tr>
                 </thead>
 
@@ -101,11 +95,21 @@
 
     </main>
 
+    <footer class="footer">
+        <div id="response">
+
+        </div>
+    </footer>
+
     <script>
 
         $('.date').datepicker({
             multidate: true,
             format: 'dd-mm-yyyy'
+        });
+
+        $("#submit").click(function () {
+            $.getScript("./scripts/models/ajax.js");
         });
 
     </script>
