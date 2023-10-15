@@ -2,7 +2,7 @@
 
 ## Live Website
 
-- [Link]()
+- [Link](https://harsh-sangwan2003.github.io/Daily-Run-Report/)
 
 A quick guide to my Project ->
 
